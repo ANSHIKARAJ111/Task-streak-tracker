@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List with Metrics</title>
+  <style>
+  
+    body {
+  background-image: url("todolist.jpg");
+  background-position: center;
+  background-size: cover;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+  background-color: #e0f2f1;
+}
+
+
+.container {
+  background-color: #ffffff;
+  padding: 100px 35px;         
+  border-radius: 16px;        
+  box-shadow: 0 50px 30px rgba(0, 0, 0, 0.15);  
+  width: 100%;
+  max-width: 600px;          
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+
+h1 {
+  color: #00796b;
+  font-size: 2em;
+  margin-bottom: 0.3em;
+}
+
+h3 {
+  margin-top: 1.5em;
+  font-size: 1.2em;
+  color: #004d40;
+}
+
+
+p.description {
+  color: #607d8b;
+  font-size: 0.95em;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+
+input[type="text"],
+input[type="date"] {
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #00796b;
+}
+
+
+button {
+  padding: 10px 24px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #004d40;
+}
+
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+li {
+  background-color: #f1f8e9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  word-break: break-word;
+}
+
+li.completed {
+  background-color: #c8e6c9;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+
+li span {
+  flex-grow: 1;
+  margin-right: 10px;
+  color: #333;
+}
+
+.due-date {
+  font-size: 0.85em;
+  color: #757575;
+}
+
+
+li button {
+  padding: 6px 8px;
+  font-size: 0.85em;
+  margin-left: 5px;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.complete { background-color: #4caf50; }
+.complete:hover { background-color: #388e3c; }
+
+.remove { background-color: #e53935; }
+.remove:hover { background-color: #b71c1c; }
+
+.share { background-color: #2196f3; }
+.share:hover { background-color: #0b7dda; }
+
+
+.score {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  color: #00796b;
+}
+
+.metrics {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 0.95em;
+  color: #004d40;
+  line-height: 1.6;
+}
+
+.streak {
+  color: #00796b;
+  font-weight: bold;
+}
+
+
+.badges {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #ffab00;
+  padding: 8px 14px;
+  font-size: 0.9em;
+  color: white;
+  border-radius: 20px;
+  margin: 6px 4px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.share-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.share-modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: left;
+}
+
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 1.5em;
+  color: #999;
+  cursor: pointer;
+}
+
+.share-url {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95em;
+}
+
+.share-options {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.share-option {
+  display: inline-block;
+  margin: 0 15px;
+  cursor: pointer;
+  color: #00796b;
+  font-size: 1em;
+  transition: transform 0.2s;
+}
+
+.share-option:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 15px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 1.6em;
+  }
+
+  .badge {
+    font-size: 0.8em;
+    padding: 6px 10px;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  li button {
+    margin-top: 6px;
+    font-size: 0.75em;
+  }
+
+  .share-option {
+    margin: 0 10px;
+    font-size: 0.9em;
+  }
+}
+
+    .progress-section {
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 16px;
+      margin-top: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #4caf50;
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 20px;
+    }
+  </style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <p class="description">Welcome to your personal task manager! Add tasks, prioritize them, track your progress, and measure your productivity.</p>
+    <div class="score">Points: <span id="points">0</span></div>
+
+    <!-- ✅ Progress Section -->
+    <div class="progress-section">
+      <p>Progress: <span id="progressPercent">0%</span></p>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <input type="date" id="dueDateInput">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+
+    <div class="badges">
+      <h3>Badges:</h3>
+      <div id="badgeContainer"></div>
+    </div>
+
+    <div class="metrics">
+      <h3>Health & Productivity Metrics</h3>
+      <p>Tasks Completed Today: <span id="tasksCompleted">0</span></p>
+      <p>Streak: <span id="taskStreak" class="streak">0 Days</span></p>
+      <p>Overall Impact: <span id="healthImpact">Neutral</span></p>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="share-modal" id="shareModal">
+    <div class="share-modal-content">
+      <span class="close-modal" onclick="closeShareModal()">&times;</span>
+      <h2>Share Task</h2>
+      <p>Copy this link to share the task with others:</p>
+      <input type="text" class="share-url" id="shareUrl" readonly>
+      <div class="share-options">
+        <div class="share-option" onclick="copyShareLink()">
+          <i class="fas fa-copy"></i> Copy
+        </div>
+        <div class="share-option" onclick="shareViaEmail()">
+          <i class="fas fa-envelope"></i> Email
+        </div>
+        <div class="share-option" onclick="shareViaWhatsApp()">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <script>
+    let points = 0;
+    let completedToday = 0;
+    let streak = 0;
+    let lastCompletedDate = null;
+    let tasks = [];
+    let currentTaskId = 0;
+
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const dueDateInput = document.getElementById('dueDateInput');
+      const taskList = document.getElementById('taskList');
+      const taskText = taskInput.value;
+      const dueDate = dueDateInput.value;
+
+      if (taskText.trim() !== '') {
+        const taskId = 'task-' + currentTaskId++;
+        const li = document.createElement('li');
+        li.dataset.taskId = taskId;
+        li.innerHTML = `<span>${taskText}</span> <span class="due-date">${dueDate ? 'Due: ' + dueDate : ''}</span>
+                        <button class="share" onclick="shareTask('${taskId}')"><i class="fas fa-share-alt"></i></button>
+                        <button class="complete" onclick="completeTask(this)">Complete</button>
+                        <button class="remove" onclick="removeTask(this)">Remove</button>`;
+        taskList.appendChild(li);
+
+        tasks.push({ id: taskId, text: taskText, dueDate: dueDate, completed: false });
+        taskInput.value = '';
+        dueDateInput.value = '';
+        updateProgress(); 
+      }
+    }
+
+    function completeTask(button) {
+      const li = button.parentElement;
+      const taskId = li.dataset.taskId;
+      const today = new Date().toDateString();
+
+      if (!li.classList.contains('completed')) {
+        li.classList.add('completed');
+        tasks.find(task => task.id === taskId).completed = true;
+
+        if (lastCompletedDate !== today) {
+          lastCompletedDate = today;
+          completedToday = 0;
+        }
+        completedToday++;
+        document.getElementById('tasksCompleted').textContent = completedToday;
+
+        points += 10;
+        document.getElementById('points').textContent = points;
+
+        updateStreak(today);
+        updateHealthImpact();
+        unlockBadges();
+        updateProgress(); 
+      } else {
+        li.classList.remove('completed');
+        tasks.find(task => task.id === taskId).completed = false;
+
+        completedToday = Math.max(0, completedToday - 1);
+        document.getElementById('tasksCompleted').textContent = completedToday;
+        points -= 10;
+        document.getElementById('points').textContent = points;
+        updateHealthImpact();
+        updateProgress(); 
+      }
+    }
+
+    function removeTask(button) {
+      const li = button.parentElement;
+      tasks = tasks.filter(task => task.id !== li.dataset.taskId);
+      li.remove();
+      updateProgress(); 
+    }
+
+    function updateProgress() {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed).length;
+      const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+      document.getElementById('progressPercent').textContent = percent + '%';
+      document.getElementById('progressFill').style.width = percent + '%';
+    }
+
+    function shareTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      const url = `${window.location.origin}${window.location.pathname}?sharedTask=${encodeURIComponent(JSON.stringify({
+        text: task.text, dueDate: task.dueDate
+      }))}`;
+      document.getElementById('shareUrl').value = url;
+      document.getElementById('shareModal').style.display = 'flex';
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').style.display = 'none';
+    }
+
+    function copyShareLink() {
+      const url = document.getElementById('shareUrl').value;
+      navigator.clipboard.writeText(url).then(() => {
+        document.getElementById('shareUrl').value = "Copied to clipboard!";
+        setTimeout(() => document.getElementById('shareUrl').value = url, 2000);
+      }).catch(err => alert("Copy failed"));
+    }
+
+    function shareViaEmail() {
+      const taskUrl = document.getElementById('shareUrl').value;
+      window.location.href = mailto:?subject=Shared To-Do Task&body=Here's a task I wanted to share with you: ${taskUrl};
+    }
+
+    function shareViaWhatsApp() {
+      const taskUrl = document.getElementById('shareUrl').value;
+      window.open(https://wa.me/?text=Check out this task: ${taskUrl});
+    }
+
+    function updateStreak(today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toDateString();
+
+      if (lastCompletedDate === yesterdayStr) {
+        streak++;
+      } else if (lastCompletedDate !== today) {
+        streak = 1;
+      }
+      document.getElementById('taskStreak').textContent = ${streak} Days;
+    }
+
+    function updateHealthImpact() {
+      const impact = completedToday > 5 ? "Positive" : completedToday === 0 ? "Neutral" : "Moderate";
+      document.getElementById('healthImpact').textContent = impact;
+    }
+
+    function unlockBadges() {
+      const badgeContainer = document.getElementById('badgeContainer');
+      if (points >= 50 && !document.querySelector('.badge[data-badge="gold"]')) {
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.dataset.badge = 'gold';
+        badge.textContent = 'Gold Badge: 50 Points';
+        badgeContainer.appendChild(badge);
+      }
+      if (points >= 100 && !document.querySelector('.badge[data-badge="diamond"]')) {
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.dataset.badge = 'diamond';
+        badge.textContent = 'Diamond Badge: 100 Points';
+        badgeContainer.appendChild(badge);
+      }
+    }
+
+    function checkForSharedTasks() {
+      const params = new URLSearchParams(window.location.search);
+      const sharedTask = params.get('sharedTask');
+      if (sharedTask) {
+        try {
+          const task = JSON.parse(decodeURIComponent(sharedTask));
+          if (task.text) {
+            document.getElementById('taskInput').value = task.text;
+            if (task.dueDate) {
+              document.getElementById('dueDateInput').value = task.dueDate;
+            }
+            history.replaceState(null, null, window.location.pathname);
+          }
+        } catch (e) {
+          console.error('Error parsing shared task', e);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      new Sortable(document.getElementById('taskList'), { animation: 150 });
+      checkForSharedTasks();
+    });
+  </script>
+</body>
+</html>
